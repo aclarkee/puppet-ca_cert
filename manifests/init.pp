@@ -83,6 +83,7 @@ class ca_cert (
         ensure => $package_ensure,
         name   => $package_name,
       }
+
     }
   }
 

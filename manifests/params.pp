@@ -21,14 +21,28 @@ class ca_cert::params {
       }
     }
     'RedHat': {
-      $trusted_cert_dir    = '/etc/pki/ca-trust/source/anchors'
-      $distrusted_cert_dir = '/etc/pki/ca-trust/source/blacklist'
-      $update_cmd          = 'update-ca-trust extract'
-      $cert_dir_group      = 'root'
-      $cert_dir_mode       = '0755'
-      $ca_file_mode        = '0644'
-      $ca_file_extension   = 'crt'
-      $package_name        = 'ca-certificates'
+      case $::operatingsystemmajrelease {
+        '5':  {
+          $trusted_cert_dir    = '/etc/pki/tls/certs'
+          $distrusted_cert_dir = '/etc/pki/ca-trust/source/blacklist'
+          $update_cmd          = 'c_rehash'
+          $cert_dir_group      = 'root'
+          $cert_dir_mode       = '0755'
+          $ca_file_mode        = '0644'
+          $package_name        = 'openssl-perl'
+          $ca_file_extension   = 'pem'
+        }
+        default: {
+          $trusted_cert_dir    = '/etc/pki/ca-trust/source/anchors'
+          $distrusted_cert_dir = '/etc/pki/ca-trust/source/blacklist'
+          $update_cmd          = 'update-ca-trust extract'
+          $cert_dir_group      = 'root'
+          $cert_dir_mode       = '0755'
+          $ca_file_mode        = '0644'
+          $ca_file_extension   = 'crt'
+          $package_name        = 'ca-certificates'
+        }
+      }
     }
     'Archlinux': {
       $trusted_cert_dir    = '/etc/ca-certificates/trust-source/anchors/'
